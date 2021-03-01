@@ -98,10 +98,19 @@ spec:
 {{- if $.ServiceAccount }}
       serviceAccountName: {{ $.Service }}
 {{- end }}
+      securityContext:
+        runAsUser: 1000
       containers:
       - name: app
         image: {{ $.Hub }}/app:{{ $.Tag }}
         imagePullPolicy: {{ $.PullPolicy }}
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "250m"
+          limits:
+            memory: "200Mi"
+            cpu: "250m"
         args:
           - --metrics=15014
           - --cluster
@@ -246,6 +255,13 @@ spec:
       - name: istio-proxy
         image: {{ $.Hub }}/{{ $.VM.Image }}:{{ $.Tag }}
         imagePullPolicy: {{ $.PullPolicy }}
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "250m"
+          limits:
+            memory: "200Mi"
+            cpu: "250m"
         securityContext:
           capabilities:
             add:

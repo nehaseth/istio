@@ -85,19 +85,10 @@ func (n *kubeNamespace) Close() (err error) {
 	return
 }
 
+//Overriding behaviour of claim, since in other than Dev clusters,
+//there will be no permission to list all namespaces and create namespaces
+//So, if claim is called, its assumed that it already exists with right labels, and will never create
 func claimKube(ctx resource.Context, nsConfig *Config) (Instance, error) {
-	for _, cluster := range ctx.Clusters() {
-		if !kube2.NamespaceExists(cluster, nsConfig.Prefix) {
-			if _, err := cluster.CoreV1().Namespaces().Create(context.TODO(), &kubeApiCore.Namespace{
-				ObjectMeta: kubeApiMeta.ObjectMeta{
-					Name:   nsConfig.Prefix,
-					Labels: createNamespaceLabels(nsConfig),
-				},
-			}, kubeApiMeta.CreateOptions{}); err != nil {
-				return nil, err
-			}
-		}
-	}
 	return &kubeNamespace{name: nsConfig.Prefix}, nil
 }
 
