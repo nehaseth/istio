@@ -198,7 +198,8 @@ data:
           "autoInject": true,
           "enabled": false
         },
-        "rewriteAppHTTPProbe": true
+        "rewriteAppHTTPProbe": true,
+        "useLegacySelectors": true
       }
     }
 
